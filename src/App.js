@@ -1,25 +1,46 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { createContext, useState } from 'react';
+import FakeDataLoad from './Components/FakeDataLoad/FakeDataLoad';
+import './App.css'
+import Nav from './Components/Nav/Nav';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
+import Booking from './Components/Booking/Booking';
+import HotelBook from './Components/HotelBook/HotelBook';
+import Login from './Components/Auth/Login';
+import PrivetRoute from './Components/PrivetRoute/PrivetRoute';
 
-function App() {
+export const userContext = createContext();
+const App = () => {
+  const [loggedInUser, setLoggedInUser] = useState({});
+  console.log(loggedInUser);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <userContext.Provider value={[loggedInUser, setLoggedInUser]}>
+      <Router>
+      <Nav></Nav>
+      <Switch>
+        <Route path="/home">
+        <FakeDataLoad></FakeDataLoad>
+        </Route>
+        <Route exact path="/">
+        <FakeDataLoad></FakeDataLoad>
+        </Route>
+        <Route path="/book/:id">
+          <Booking></Booking>
+        </Route>
+        <PrivetRoute path="/hotel/:id">
+          <HotelBook></HotelBook>
+        </PrivetRoute>
+        <Route path="/login">
+          <Login></Login>
+        </Route>
+      </Switch>
+    </Router>
+    </userContext.Provider>
   );
-}
+};
 
 export default App;
